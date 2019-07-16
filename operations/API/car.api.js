@@ -1,6 +1,8 @@
 const  BRAND = require ('../DB/brand.db');
 const  MODEL = require ('../DB/model.db');
+const OWNER = require('../DB/owner.db');
 const CAR = require('../DB/car.db');
+
 
 const { cars_Owner_Age_Greater_Than } = require('../VALIDATORS/car.validators')
 
@@ -8,6 +10,15 @@ const postCar = async (req, res) => {
     const car = req.body;
     const nameBrand = car.brand;
     const model = car.model;
+    const dniOwner = car.owner;
+
+    try{
+    const foundOwner = await OWNER.findOwnerByDNI(dniOwner);
+
+    if(foundOwner.length!==1) {
+        res.status(404).json({err:"The owner doesn't exist"});
+        return;
+    };
 
     const foundBrand = await  BRAND.findBrandsByName(nameBrand); 
 
@@ -16,7 +27,7 @@ const postCar = async (req, res) => {
         return;
     }
     
-    car.brand = foundBrand[0]._id;
+    car.brand = foundBrand[0].id;
 
     const foundModel = await MODEL.findModelByName(model);
 
@@ -25,11 +36,14 @@ const postCar = async (req, res) => {
         return;
     }
 
-    car.model = foundModel[0]._id;
+    car.model = foundModel[0].id;
 
     const createdCar = await CAR.createCar(car);
 
     res.status(200).json({newCar:createdCar});
+    }catch(error){
+        res.status(500).json(error);
+    }
 }
 
 const getAllCars = async (req, res) => {
@@ -56,12 +70,12 @@ const getAllCarsByBrands = async (req, res) => {
 
     const foundBrand = await  BRAND.findBrandsByName(nameBrand); 
 
-    if(!foundBrand) {
+    if(foundBrand.length===0) {
         res.status(404).json({err:"The brand doesn't exist"});
         return;
     }
 
-    const foundCar = await CAR.findCarByBrand(nameBrand);
+    const foundCar = await CAR.findCarByBrand(foundBrand[0].id);
 
     res.status(200).json({car:foundCar});
 };
@@ -71,7 +85,7 @@ const getAllCarsByModels = async (req, res) => {
 
     const foundModel = await MODEL.findModelByName(nameModel);
 
-    if(!foundModel){
+    if(foundModel.length===0){
         res.status(404).json({err:"The model doesn't exist"});
         return;
     }

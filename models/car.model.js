@@ -1,21 +1,50 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const Sequalize = require('sequelize');
+const sequelize = require('../common/mariadb');
+const Brand = require('./brand.model');
+const Model = require ('./model.model');
+const Owner = require('./owner.model')
 
-const OwnerSchema = new mongoose.Schema ({
-    dni:{type: String},
-    name:{type: String},
-    date:{type: Date}
-}); 
+const Car = sequelize.define('Car',{
+    plate: {
+      type: Sequalize.STRING(8),
+      allowNull:false,
+      primaryKey: true
+    },
+    brand: {
+      type: Sequalize.BIGINT(11),
+      allowNull:false,
+      reference:{
+        model: Brand,
+        key:'id'
+      }
+    },
+    model:{
+      type: Sequalize.BIGINT(11),
+      allowNull:false,
+      reference:{
+        model: Model,
+        key:'id'
+      }
+    },
+    year:{
+      type:Sequalize.INTEGER(4),
+      allowNull: false
+    },
+    transmition:{
+      type: Sequalize.STRING(3),
+      validate:{
+        isIn: [['MAN', 'AUT']], 
+      }
+    },
+    owner:{
+      type: Sequalize.BIGINT(11),
+      allowNull:false,
+      reference:{
+        model: Owner,
+        key:'dni'
+      }
+    }
+});
 
-const CarSchema = new mongoose.Schema (
-  {
-    plate:{ type: String, unique: true,required: true },
-    brand:{ type: Schema.Types.ObjectId, ref: 'Brand'},
-    model:{ type: Schema.Types.ObjectId, ref: 'Model'},
-    year: {type: Number},
-    transmition: {type: String, enum:['MAN','AUT']},
-    owner: {type: OwnerSchema}
-}
-);
 
-module.exports= mongoose.model('CAR',CarSchema);
+module.exports = Car;

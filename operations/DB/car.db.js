@@ -2,14 +2,16 @@ const CAR = require('../../models/car.model');
 
 
 const createCar = async (car) => {
-    const createdCar = new CAR(car);
-    const resposeCreatedCar = await createdCar.save();
-    return resposeCreatedCar;
+    const resposedCreatedCar = await CAR.create(car);
+    return resposedCreatedCar;
 };
 
-const findAllCars = async () => CAR.find();
+const findAllCars = async () => CAR.findAll();
 
-const findCarByBrand = async (idBrand) => CAR.findById({brand:idBrand});
+const findCarByBrand = async (brand) => 
+                            CAR.findAll({
+                                 where:{brand}
+                                });
 
 module.exports = {
     createCar,
