@@ -5,7 +5,7 @@ module.exports =
     mariaDb:{
         database:"tallerMySQL",
         username:"root",
-        password:"Iasa1725493769",
+        password:"",
         host:"localhost"
     },
 }
