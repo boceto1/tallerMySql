@@ -44,7 +44,19 @@ const getAllCars = async (req, res) => {
 };
 
 const getBrandById = async (req, res) => {
-    res.send("Works well");
+    try {
+        const id = req.params.id;
+        const foundCar = await CAR.findCarById(id);
+        
+        if(!foundCar){
+            res.status(404).json({car:foundCar});
+            return;
+        }
+        res.status(200).json({car:foundCar});
+
+    } catch (error) {
+        res.status(500).json({error});    
+    }
 };
 
 const changeOwner = async (req, res) => {
@@ -54,13 +66,14 @@ const changeOwner = async (req, res) => {
 const getAllCarsByBrands = async (req, res) => {
     const nameBrand = req.params.nameBrand;
 
-    const foundBrand = await  BRAND.findBrandsByName(nameBrand); 
+    const foundBrand = await  BRAND.findBrandsByName(nameBrand);
+    
+    console.log(foundBrand);
 
     if(!foundBrand) {
         res.status(404).json({err:"The brand doesn't exist"});
         return;
     }
-
     const foundCar = await CAR.findCarByBrand(nameBrand);
 
     res.status(200).json({car:foundCar});
@@ -76,7 +89,9 @@ const getAllCarsByModels = async (req, res) => {
         return;
     }
 
-    res.send("Works well");
+    const foundCar = await CAR.findCarByModel(nameModel);
+
+    res.status(200).json({car:foundCar});
 };
 
 
