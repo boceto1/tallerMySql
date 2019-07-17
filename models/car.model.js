@@ -1,8 +1,5 @@
-const Sequalize = require('sequelize');
-const sequelize = require('../common/mariadb');
-const Brand = require('./brand.model');
-const Model = require ('./model.model');
-const Owner = require('./owner.model')
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
 
 
 sequelize.sync();
@@ -48,6 +45,5 @@ const Car = sequelize.define('Car',{
       }
     }
 });
-
 
 module.exports = Car;
