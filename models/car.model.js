@@ -1,5 +1,8 @@
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const Sequalize = require('sequelize');
+const sequelize = require('../common/mariadb');
+const Brand = require('./brand.model');
+const Model = require ('./model.model');
+const Owner = require('./owner.model')
 
 
 sequelize.sync();
