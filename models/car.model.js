@@ -4,6 +4,9 @@ const Brand = require('./brand.model');
 const Model = require ('./model.model');
 const Owner = require('./owner.model')
 
+
+sequelize.sync();
+
 const Car = sequelize.define('Car',{
     plate: {
       type: Sequalize.STRING(8),
