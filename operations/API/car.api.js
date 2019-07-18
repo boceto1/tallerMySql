@@ -74,7 +74,21 @@ const getBrandById = async (req, res) => {
 };
 
 const changeOwner = async (req, res) => {
-    res.send("Works well");
+    const dniOwner = req.body.dni;
+    try {
+        const id = req.params.id;
+        const foundCar = await CAR.findCarById(id);
+      if(!foundCar){
+            res.status(404).json({car:foundCar});
+            return;
+        }
+        const changeOwnerCar = await CAR.changeOwnerCar(id, dniOwner);
+
+        res.status(200).json({car:changeOwnerCar});
+
+    } catch (error) {
+        res.status(500).json({error});    
+    }
 };
 
 const getAllCarsByBrands = async (req, res) => {
