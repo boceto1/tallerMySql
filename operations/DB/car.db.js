@@ -13,8 +13,16 @@ const findCarByBrand = async (brand) =>
                                  where:{brand}
                                 });
 
+const findCarByModel = async (model) => 
+                                CAR.findAll({
+                                     where:{model}
+                                    });
+const changeOwnerCar = async (id,owner) => CAR.findByIdAndUpdate(id,{owner}, {new: true});
+
 module.exports = {
     createCar,
     findAllCars,
+    findCarByModel,
     findCarByBrand
+    
 };

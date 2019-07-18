@@ -14,8 +14,8 @@ const findModelById = async (id) =>
 const findModelByName = async (name) =>
                          MODEL.findAll({
                              where:{name}
-                            }) || []; 
-
+                            }) || [];
+                             
 const findAllModels = async () => MODEL.findAll();
 
 module.exports = {
